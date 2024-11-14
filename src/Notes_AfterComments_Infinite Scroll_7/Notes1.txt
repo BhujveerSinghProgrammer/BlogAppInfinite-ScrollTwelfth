@@ -1,0 +1,5 @@
+//Steps to use Infinite Scroll==>
+Step 1:- Search for infinite scroll react js in browser
+step 2:- PS E:\SCLR\TuesdayCompletepRO\BlogAppInfinite ScrollTwelfth>   npm install react-infinite-scroll-component
+step 3:-
+
