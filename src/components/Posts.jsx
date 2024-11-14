@@ -8,12 +8,12 @@ function Posts({ post = { Title: "This is Default Post Title", Content: "This is
       <CardBody>
           <Link to="/">Home</Link> /(<Link to=""> {post.CategoryName}</Link>)
  <CardText>
-  Posted By <b style={{color:'Green'}}>{post.name}</b> on <b style={{color:'Orange'}} >{new Date(post.Doe)?.toLocaleDateString()}</b>
+  Posted By <b style={{color:'Green'}}>{post.name}</b> on <b style={{color:'Orange'}} >{new Date(post?.Doe)?.toLocaleDateString()}</b>
 </CardText>
         <h4>{post.Title}</h4>
       
         {/* <CardText>{post.Content}</CardText> */}
-  <CardText dangerouslySetInnerHTML={{ __html:post.Content.substring(0,60)+'..'}}>
+  <CardText dangerouslySetInnerHTML={{ __html:post?.Content?.substring(0,60)+'..'}}>
     {/* {post.Content.substring(0,30)}... */}
     </CardText>
         <div>
