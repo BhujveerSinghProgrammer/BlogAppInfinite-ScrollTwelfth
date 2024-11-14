@@ -71,11 +71,11 @@ function NewFeed() {
             hasMore={true}
             loader={<h4>Loading...</h4>}
              endMessage={
-    <p style={{ textAlign: 'center' }}>
-      <b>Yay! You have seen it all</b>
-    </p>
-  }
-  
+                <p style={{ textAlign: 'center' }}>
+                <b>Yay! You have seen it all</b>
+                 </p>
+                  }
+
           >
             {postContent?.Contents?.map((post) => (
               <Posts post={post} key={post.Id} />
