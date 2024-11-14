@@ -17,46 +17,40 @@ function NewFeed() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Fetch paged posts when the page is first loaded
+  // Fetch paged posts when the page is first loaded or page changes
   useEffect(() => {
     changePage(currentPage);
-  }, [currentPage]); // Only runs on currentPage change
+  }, [currentPage]);
 
   // Handle page change
   const changePage = (pageNumber) => {
-    if (pageNumber > postContent.PageNumber && postContent.LastPage) {
-      return;
-    }
-
-    if (pageNumber < postContent.PageNumber && postContent.PageNumber === 0) {
+    // Skip if the page number exceeds TotalPages (unless TotalPages is 0 or undefined)
+    //Note:- postContent.TotalPages is greater than 0 and "pageNumber" is greater than 
+    if (postContent.TotalPages > 0 && pageNumber > postContent.TotalPages) {
       return;
     }
 
     loadAllPostsByPageNumberandPageSize(pageNumber, postContent.PageSize)
       .then((data) => {
-        setPostContent({
-          Contents: [...postContent.Contents, ...data.Contents],
+        setPostContent((prevState) => ({
+          Contents: [...prevState.Contents, ...data.Contents],
           LastPage: data.LastPage,
           PageNumber: data.PageNumber,
           PageSize: data.PageSize,
           TotalElements: data.TotalElements,
           TotalPages: data.TotalPages
-        });
-
-        console.log('Page Number:', pageNumber);
-        console.log(data);
-
-        // Optionally, reset scroll position
-        // window.scroll(0, 0);
+        }));
       })
       .catch((error) => {
-        toast.error('Error in Loading Posts Pagewise');
+        toast.error('Error in loading posts pagewise');
       });
   };
 
   const changePageInfinite = () => {
-    console.log('Page changed');
-    setCurrentPage(currentPage + 1);
+    // Increment the current page to load the next page of content
+    if (currentPage < postContent.TotalPages || postContent.TotalPages === 0) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
   };
 
   return (
@@ -68,14 +62,13 @@ function NewFeed() {
           <InfiniteScroll
             dataLength={postContent?.Contents.length}
             next={changePageInfinite}
-            hasMore={true}
+            hasMore={postContent.PageNumber < postContent.TotalPages || postContent.TotalPages === 0}
             loader={<h4>Loading...</h4>}
-             endMessage={
-                <p style={{ textAlign: 'center' }}>
+            endMessage={
+              <p style={{ textAlign: 'center' }}>
                 <b>Yay! You have seen it all</b>
-                 </p>
-                  }
-
+              </p>
+            }
           >
             {postContent?.Contents?.map((post) => (
               <Posts post={post} key={post.Id} />
